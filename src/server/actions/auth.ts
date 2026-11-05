@@ -4,7 +4,8 @@ import { redirect } from "next/navigation";
 import { isAuthRetryableFetchError } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/server";
 
-const SERVICE_DOWN = "We cannot reach the sign-in service right now. Please try again in a moment.";
+const SERVICE_DOWN =
+  "We cannot reach the sign-in service right now. Please try again in a moment.";
 import { publicEnv } from "@/lib/env";
 import {
   failure,

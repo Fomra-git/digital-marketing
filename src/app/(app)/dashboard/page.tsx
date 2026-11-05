@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import {
+  AlertTriangle,
   Building2,
+  Eye,
+  ListTodo,
   CheckCircle2,
   Circle,
   FolderKanban,
@@ -24,6 +27,7 @@ import { EmptyState } from "@/components/shared/empty-state";
 import { RoleChip } from "@/components/team/assignments-panel";
 import { StatusChart } from "@/components/dashboard/status-chart";
 import { getAssignments } from "@/server/queries/team";
+import { listTasks } from "@/server/queries/tasks";
 import { humanize, timeAgo } from "@/lib/utils";
 import { PROJECT_STATUSES } from "@/lib/validations/project";
 
@@ -57,7 +61,7 @@ export default async function DashboardPage() {
   if (projectId) activityQuery = activityQuery.eq("project_id", projectId);
   else if (companyId) activityQuery = activityQuery.eq("company_id", companyId);
 
-  const [membersRes, activityRes, myAssignments, rolesRes, invitedRes] =
+  const [membersRes, activityRes, myAssignments, rolesRes, invitedRes, tasks] =
     await Promise.all([
       ctx.supabase
         .from("organization_members")
@@ -78,7 +82,25 @@ export default async function DashboardPage() {
             .select("id", { count: "exact", head: true })
             .eq("organization_id", ctx.organization.id)
         : Promise.resolve({ count: null }),
+      ctx.canAnywhere("tasks.view") || ctx.canAnywhere("tasks.view_all")
+        ? listTasks(ctx, { companyId, projectId })
+        : Promise.resolve(null),
     ]);
+
+  const today = new Date().toISOString().slice(0, 10);
+  const openTasks =
+    tasks?.filter((t) => !["completed", "cancelled"].includes(t.status)) ?? [];
+  const taskStats = tasks
+    ? {
+        open: openTasks.length,
+        overdue: openTasks.filter(
+          (t) => t.status !== "approved" && t.due_date && t.due_date < today,
+        ).length,
+        review: openTasks.filter((t) => t.status === "waiting_for_review")
+          .length,
+        completed: tasks.filter((t) => t.status === "completed").length,
+      }
+    : null;
 
   const statusData = PROJECT_STATUSES.map((s) => ({
     label: humanize(s),
@@ -174,6 +196,41 @@ export default async function DashboardPage() {
           href={`/team/${ctx.user.id}`}
         />
       </div>
+
+      {taskStats && (
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <StatCard
+            label="Open tasks"
+            value={taskStats.open}
+            hint="Not completed or cancelled"
+            icon={ListTodo}
+            href="/tasks"
+          />
+          <StatCard
+            label="Overdue tasks"
+            value={taskStats.overdue}
+            hint="Past due date"
+            icon={AlertTriangle}
+            tone="amber"
+            href="/tasks?view=list"
+          />
+          <StatCard
+            label="Waiting for review"
+            value={taskStats.review}
+            hint="Submitted, not yet approved"
+            icon={Eye}
+            tone="violet"
+            href="/tasks"
+          />
+          <StatCard
+            label="Completed tasks"
+            value={taskStats.completed}
+            hint="Last 90 days"
+            icon={CheckCircle2}
+            tone="blue"
+          />
+        </div>
+      )}
 
       <div className="grid gap-6 lg:grid-cols-3">
         <Card className="lg:col-span-2">

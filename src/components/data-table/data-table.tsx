@@ -62,7 +62,11 @@ export const dataTableFeatures = tableFeatures({
 export type DataTableFeatures = typeof dataTableFeatures;
 // Column value types vary per column, so the value generic is left open.
 /* eslint-disable @typescript-eslint/no-explicit-any */
-export type DataTableColumn<TData extends RowData> = ColumnDef<DataTableFeatures, TData, any>;
+export type DataTableColumn<TData extends RowData> = ColumnDef<
+  DataTableFeatures,
+  TData,
+  any
+>;
 /* eslint-enable @typescript-eslint/no-explicit-any */
 
 export function dataTableColumns<TData extends RowData>() {

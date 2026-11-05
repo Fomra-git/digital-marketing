@@ -2,7 +2,14 @@
 
 import { useEffect, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { Building2, FolderKanban, Loader2, Search, User } from "lucide-react";
+import {
+  Building2,
+  FolderKanban,
+  ListTodo,
+  Loader2,
+  Search,
+  User,
+} from "lucide-react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { globalSearch, type SearchResult } from "@/server/actions/search";
@@ -12,11 +19,13 @@ const ICONS: Record<string, typeof Search> = {
   company: Building2,
   project: FolderKanban,
   member: User,
+  task: ListTodo,
 };
 const LABELS: Record<string, string> = {
   company: "Company",
   project: "Project",
   member: "Team member",
+  task: "Task",
 };
 
 /** Ctrl/⌘ + K search across everything the user is allowed to see. */
@@ -104,7 +113,7 @@ export function GlobalSearch() {
                   go(shown[active]);
                 }
               }}
-              placeholder="Search companies, projects and people…"
+              placeholder="Search companies, projects, people and tasks…"
               className="h-12 flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
               aria-label="Search query"
             />

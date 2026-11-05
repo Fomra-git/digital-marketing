@@ -10,9 +10,9 @@ export type SearchResult = {
   url: string;
 };
 
-// Entity types whose pages exist. Later phases add tasks, campaigns, keywords,
+// Entity types whose pages exist. Later phases add campaigns, keywords,
 // social posts, creatives and videos here as their modules ship.
-const ROUTED_TYPES = new Set(["company", "project", "member"]);
+const ROUTED_TYPES = new Set(["company", "project", "member", "task"]);
 
 /** Permission-aware search: the database function runs under the caller's RLS. */
 export async function globalSearch(query: string): Promise<SearchResult[]> {

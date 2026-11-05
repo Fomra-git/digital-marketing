@@ -3864,7 +3864,35 @@ export type Database = {
         Args: Record<PropertyKey, never>;
         Returns: boolean;
       };
+      process_task_deadlines: {
+        Args: Record<PropertyKey, never>;
+        Returns: number;
+      };
       slugify: { Args: { value: string }; Returns: string };
+      task_assignable_users: {
+        Args: { p_company_id: string; p_project_id?: string };
+        Returns: {
+          user_id: string;
+        }[];
+      };
+      task_assignee_summary: {
+        Args: {
+          p_company_id?: string;
+          p_from?: string;
+          p_project_id?: string;
+          p_to?: string;
+        };
+        Returns: {
+          assigned: number;
+          avg_completion_hours: number;
+          completed: number;
+          overdue: number;
+          pending: number;
+          revisions: number;
+          under_review: number;
+          user_id: string;
+        }[];
+      };
     };
     Enums: {
       [_ in never]: never;

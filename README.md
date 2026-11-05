@@ -13,9 +13,10 @@ Zod · Supabase (Auth, Postgres + RLS, Storage, Realtime).
 
 ## Status
 
-**Phase 1 (Foundation) is complete.** The full database for all six phases is
-in place with Row Level Security and tests; the modules of Phases 2–6 get their
-screens in the next phases. Only implemented modules appear in the navigation.
+**Phases 1 (Foundation) and 2 (Tasks & Team) are complete.** The full database
+for all six phases is in place with Row Level Security and tests; the modules
+of Phases 3–6 get their screens in the next phases. Only implemented modules
+appear in the navigation. Phase 2 details: [`docs/PHASE-2.md`](docs/PHASE-2.md).
 
 What works now:
 
@@ -29,6 +30,10 @@ What works now:
 | Roles & permissions | 8 default roles, custom roles, copy from an existing role, permission matrix by module, who-has-this-role |
 | Shell | Dark sidebar, company + project switcher (filters lists and dashboard), permission-aware global search (⌘K), live notification bell, mobile navigation |
 | Dashboard | Real counts filtered by the selected company/project, projects-by-status chart, getting-started checklist, my access, recent activity |
+| Tasks | Board / list / calendar views with drag-and-drop, subtasks, dependencies, multiple assignees, comments with @mentions, files, approvals and revision requests, full history |
+| Daily reports | Write / draft / submit, manager review and feedback, attachments; drafts stay private |
+| Dashboards | My Work (per employee) and Team Performance (per employee and department, date ranges, overdue work, missing reports) |
+| Notifications | Assignment, review, revision, approval, completion, comments, mentions, due soon, overdue, missed deadlines, daily reports — live in the bell |
 | Audit | Every change to companies, projects, roles, permissions, members and assignments is logged |
 
 ## 1. Prerequisites
@@ -60,7 +65,10 @@ What works now:
 6. **Realtime**: the migration adds `notifications` to the `supabase_realtime`
    publication when it exists. If you created the project without Realtime,
    enable it for the `notifications` table under Database → Publications.
-7. **Custom SMTP** (Auth → SMTP) is strongly recommended for production; the
+7. **Deadline reminders**: enable the `pg_cron` extension (Database →
+   Extensions) and schedule `public.process_task_deadlines()` hourly — see
+   [`docs/PHASE-2.md`](docs/PHASE-2.md).
+8. **Custom SMTP** (Auth → SMTP) is strongly recommended for production; the
    built-in sender is rate-limited.
 
 ## 3. Run the app locally

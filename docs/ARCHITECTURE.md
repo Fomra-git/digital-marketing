@@ -444,7 +444,7 @@ Each later module adds `app/(app)/<module>`, `components/<module>`,
 | Phase | Scope | Status |
 |---|---|---|
 | 1 | Foundation: auth, profiles, organization bootstrap, companies, projects, departments, roles & permission matrix, scoped assignments, team directory & invitations, RLS for **all** tables, storage policies, audit log, notifications centre, global search, responsive shell with company/project switcher | **Done** |
-| 2 | Tasks (Kanban/list/calendar, subtasks, dependencies, comments, mentions, attachments, approvals), daily activity reports & review, employee & team-leader dashboards, notification triggers (assigned, due soon, overdue) | Schema + RLS done |
+| 2 | Tasks (Kanban/list/calendar, subtasks, dependencies, comments, mentions, attachments, approvals), daily activity reports & review, employee & team-leader dashboards, notification triggers (assigned, due soon, overdue) — see [`PHASE-2.md`](PHASE-2.md) | **Done** |
 | 3 | Social media calendar (FullCalendar, dnd-kit), content versions & approvals, creative requests & gallery, AI video tracking, in-house video production with resumable uploads | Schema + RLS done |
 | 4 | Meta & Google Ads OAuth, account mapping, scheduled sync, historical metrics, charts, alerts, manual entry | Schema + RLS done |
 | 5 | SEO websites, keywords & ranking history, backlinks, SEO tasks & reports, Search Console & GA4 | Schema + RLS done |

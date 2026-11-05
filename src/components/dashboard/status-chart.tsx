@@ -16,8 +16,14 @@ const BAR = "#0D9488";
 
 export function StatusChart({
   data,
+  seriesLabel = "Projects",
+  valueSuffix = "",
+  max,
 }: {
   data: { label: string; count: number }[];
+  seriesLabel?: string;
+  valueSuffix?: string;
+  max?: number;
 }) {
   return (
     <div>
@@ -37,6 +43,8 @@ export function StatusChart({
             />
             <YAxis
               allowDecimals={false}
+              domain={max ? [0, max] : undefined}
+              unit={valueSuffix}
               tickLine={false}
               axisLine={false}
               tick={{ fill: "#64748B", fontSize: 12 }}
@@ -49,7 +57,7 @@ export function StatusChart({
                 fontSize: 12,
                 color: "#1E293B",
               }}
-              formatter={(value) => [value, "Projects"]}
+              formatter={(value) => [`${value}${valueSuffix}`, seriesLabel]}
             />
             <Bar
               dataKey="count"
@@ -61,12 +69,15 @@ export function StatusChart({
         </ResponsiveContainer>
       </div>
       <table className="sr-only">
-        <caption>Projects by status</caption>
+        <caption>{seriesLabel}</caption>
         <tbody>
           {data.map((d) => (
             <tr key={d.label}>
               <th scope="row">{d.label}</th>
-              <td>{d.count}</td>
+              <td>
+                {d.count}
+                {valueSuffix}
+              </td>
             </tr>
           ))}
         </tbody>
